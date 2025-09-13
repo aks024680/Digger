@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D遊戲引擎</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui">
+            <div id="inventory">
+                <h3>道具欄</h3>
+                <div id="inventoryItems"></div>
+            </div>
+            <div id="dialogue" class="hidden">
+                <div id="dialogueText"></div>
+                <button id="dialogueNext">繼續</button>
+            </div>
+        </div>
+    </div>
+    <script src="gameEngine.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
