@@ -1,0 +1,359 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft JhengHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+#gameContainer {
+    position: relative;
+    background: #2c3e50;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+#gameCanvas {
+    display: block;
+    background: #34495e;
+    border: 3px solid #3498db;
+}
+
+#ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#inventory {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    min-width: 200px;
+    pointer-events: auto;
+}
+
+#inventory h3 {
+    margin-bottom: 10px;
+    color: #3498db;
+    text-align: center;
+}
+
+#inventoryItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.inventory-item {
+    width: 40px;
+    height: 40px;
+    background: #34495e;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.inventory-item:hover {
+    background: #3498db;
+    transform: scale(1.1);
+}
+
+#dialogue {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e74c3c;
+    pointer-events: auto;
+}
+
+#dialogueText {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    min-height: 60px;
+}
+
+#dialogueNext {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+#dialogueNext:hover {
+    background: #c0392b;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.cg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.cg-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.cg-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.cg-close:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* 遊戲菜單樣式 */
+.game-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    font-family: 'Microsoft JhengHei', Arial, sans-serif;
+}
+
+.menu-title {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2); }
+    to { text-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.4); }
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.menu-button {
+    background: linear-gradient(145deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.menu-button:hover::before {
+    left: 100%;
+}
+
+.menu-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+}
+
+.menu-button:active {
+    transform: scale(0.95);
+}
+
+.menu-button.highlighted {
+    background: linear-gradient(145deg, #e74c3c, #c0392b);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.button-icon {
+    font-size: 1.5rem;
+}
+
+.button-text {
+    font-size: 1.1rem;
+}
+
+/* 設定面板樣式 */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.settings-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.settings-content h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.setting-group {
+    margin-bottom: 1.5rem;
+}
+
+.setting-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+    font-weight: bold;
+}
+
+.setting-group input[type="range"] {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.setting-group input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+.setting-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.settings-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.settings-btn:hover {
+    background: #2980b9;
+}
+
+/* 通知樣式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 4000;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .menu-title {
+        font-size: 2rem;
+    }
+    
+    .menu-button {
+        min-width: 150px;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .settings-content {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+}
